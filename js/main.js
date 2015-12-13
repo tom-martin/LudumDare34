@@ -39,7 +39,7 @@ container.appendChild( stats.domElement );
 // light1.position.set(1,0.5,1).normalize();
 // scene.add(light1);
 
-scene.add(new THREE.AmbientLight( 0x202020 ));
+scene.add(new THREE.AmbientLight( 0x404050 ));
 
 var lastFrameTime = Date.now();
 
@@ -90,12 +90,35 @@ var brickMaterial = new THREE.MeshLambertMaterial( {
     polygonOffsetUnits: 3,
     polygonOffset: true
 } );
+
+var drainPipeTexture = THREE.ImageUtils.loadTexture("textures/drainPipeVert1.png");
+drainPipeTexture.magFilter = THREE.NearestFilter;
+drainPipeTexture.minFilter = THREE.NearestFilter;
+drainPipeTexture.generateMipMaps = false;    
+var drainPipeMaterial = new THREE.MeshLambertMaterial( { 
+    map: drainPipeTexture,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 2,
+    polygonOffset: true,
+    transparent: true
+} );
+
 for(var x = -40; x < 40; x++) {
     for(var y = 0; y < 80; y++) {
         var plane = new THREE.Mesh( wallTileGeometry, brickMaterial );
         plane.position.x = x * 16;
         plane.position.y = y * 16;
         scene.add( plane );
+
+        if(Math.random() < 0.1 && plane.position.x != 0) {
+            var height = (5+Math.floor(Math.random()*10))*4;
+            var drainPipeGeometry = new THREE.PlaneBufferGeometry( 4, height, 1, Math.floor(height/4));
+            var plane = new THREE.Mesh( drainPipeGeometry, drainPipeMaterial );
+            plane.position.x = x * 16;
+            plane.position.y = y * 16;
+            hazardSystem.staticHazards.push({x: plane.position.x, y: plane.position.y, halfWidth: 2, halfHeight: height/2});
+            scene.add( plane );
+        }
     }
 }
 

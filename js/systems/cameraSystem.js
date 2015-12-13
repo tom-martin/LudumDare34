@@ -10,7 +10,7 @@ function CameraSystem() {
 
 			threeCamera.position.copy(cameraEntity.positionComponent.position);
 			// hack
-			targetZOffset = Math.min(96, 32+cameraComponent.lookAtEntity.playerComponent.fliesEaten);
+			targetZOffset = Math.min(96, 24+cameraComponent.lookAtEntity.playerComponent.moveSpeed);
 			if(cameraComponent.offset.z > targetZOffset) {
 				cameraComponent.offset.z = Math.max(targetZOffset, cameraComponent.offset.z-tick);
 			} else {

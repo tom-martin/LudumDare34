@@ -86,8 +86,6 @@ function PlayerSystem(input, scene, hazardSystem) {
 			positionComponent.position.z += this.moveVector.z*tick*playerComponent.moveSpeed;
 		
 
-			// debugCube1.position.copy(positionComponent.position);
-
 			lastStemPlane.position.copy(positionComponent.position);
 		    lastStemPlane.position.lerp(lastStemDrop, 0.5);
 		    var angleRadians = Math.atan2(lastStemDrop.y - positionComponent.position.y, lastStemDrop.x - positionComponent.position.x);
@@ -113,10 +111,9 @@ function PlayerSystem(input, scene, hazardSystem) {
 			    	extendStemCache(100);
 			    }
 			    lastStemDrop.copy(positionComponent.position);
-			    // debugCube2.position.copy(positionComponent.position);
 			}
 
-			playerComponent.moveSpeed = 6+playerComponent.fliesEaten;
+			playerComponent.moveSpeed = Math.min(32, 6+playerComponent.fliesEaten);
 		}
 	}
 }
