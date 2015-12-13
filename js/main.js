@@ -39,7 +39,7 @@ container.appendChild( stats.domElement );
 // light1.position.set(1,0.5,1).normalize();
 // scene.add(light1);
 
-scene.add(new THREE.AmbientLight( 0x202030 ));
+scene.add(new THREE.AmbientLight( 0x101020 ));
 
 var lastFrameTime = Date.now();
 
@@ -61,7 +61,8 @@ var hazardSystem = new HazardSystem();
 var playerSystem = new PlayerSystem(input, scene, hazardSystem);
 var randomlyRotatesSystem = new RandomlyRotatesSystem();
 var movesByRotationSystem = new MovesByRotationSystem();
-var getsEatenSystem = new GetsEatenSystem();
+var particleSystem = new ParticleSystem();
+var getsEatenSystem = new GetsEatenSystem(particleSystem);
 var recyclesNearPlayerSystem = new RecyclesNearPlayerSystem();
 var lightCarryingSystem = new LightCarryingSystem();
 
@@ -80,7 +81,7 @@ var cameraEntity = EntityFactory.createCamera(threeCamera, new THREE.Vector3(0.1
 cameraSystem.cameraEntity = cameraEntity;
 
 
-var wallTileGeometry = new THREE.PlaneBufferGeometry( 32, 32, 8, 8);
+var wallTileGeometry = new THREE.PlaneBufferGeometry( 32, 32, 12, 12);
 var brickTexture = THREE.ImageUtils.loadTexture("textures/brick.png");
 brickTexture.magFilter = THREE.NearestFilter;
 brickTexture.minFilter = THREE.NearestFilter;
@@ -185,6 +186,15 @@ for(var i = 0; i < 50; i++) {
     lightCarryingSystem.lightCarryingEntities.push(flyEntity);
 }
 
+for(var i = 0; i < 200; i++) {
+    var particleEntity = EntityFactory.createParticleEntity(scene);
+    threeJsSystem.threeJsEntities.push(particleEntity);
+    particleEntity.positionComponent.position.set(((Math.random()*8)-4) * 16, ((Math.random()*8))*16, 0);
+    particleSystem.particleEntities.push(particleEntity);
+}
+
+
+
 window.addEventListener("resize", respondToResize);
 
 var scoreImage = new Image();
@@ -231,6 +241,7 @@ function render() {
     recyclesNearPlayerSystem.update(now, tick);
     lightCarryingSystem.update(now, tick);
     hazardSystem.update(now, tick);
+    particleSystem.update(now, tick);
     
 
     renderer.render(scene, threeCamera);

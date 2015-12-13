@@ -8,7 +8,7 @@ if(canPlayMP3) {
 	biteSounds = [new Audio('sound/bite1.ogg'), new Audio('sound/bite2.ogg'), new Audio('sound/bite3.ogg'), new Audio('sound/bite4.ogg'), new Audio('sound/bite5.ogg')];
 }
 
-function GetsEatenSystem() {
+function GetsEatenSystem(particleSystem) {
 	this.eatingEntities = [];
 	this.edibleEntities = [];
 
@@ -30,6 +30,9 @@ function GetsEatenSystem() {
 							eatingEntity.playerComponent.lastEatTime = now;
 							eatingEntity.playerComponent.fliesEaten ++;
 							biteSounds[Math.floor(Math.random()*biteSounds.length)].play();
+							var newParticlePoint = new THREE.Vector3();
+							newParticlePoint.copy(ediblePositionComponent.position)
+							particleSystem.newParticlePoints.push(newParticlePoint);
 						}
 					}
 				}

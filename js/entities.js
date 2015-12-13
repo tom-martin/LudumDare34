@@ -27,9 +27,9 @@ var EntityFactory = {
 		playerEntity.playerComponent = new PlayerComponent();
 
 		playerEntity.carriesLightComponent = new CarriesLightComponent();
-		var light = new THREE.PointLight( 0x60ff80, 1, 64 );
+		var light = new THREE.PointLight( 0x60ff60, 1, 32 );
     	light.position.copy( playerEntity.positionComponent.position );
-    	light.position.z += 1;
+    	light.position.z += 0.1;
     	scene.add( light );
     	playerEntity.carriesLightComponent.light = light;
 
@@ -50,12 +50,41 @@ var EntityFactory = {
 		flyEntity.randomlyRotatesComponent = new RandomlyRotatesComponent();
 
 		flyEntity.carriesLightComponent = new CarriesLightComponent();
-		var light = new THREE.PointLight( 0xffffff, 1, 32 );
+		
+		var light = new THREE.PointLight( 0xFFFFFF, 1, 16);
     	light.position.copy( flyEntity.positionComponent.position );
-    	light.position.z += 1;
+    	light.position.z += 0.1;
     	scene.add( light );
     	flyEntity.carriesLightComponent.light = light;
 
 		return flyEntity;
+	},
+
+	entityColors: [0x0, 0x0, 0x202020, 0x404040, 0x808080, 0xFFFFFF, 0xDDDDDD],
+
+	createParticleEntity: function(scene) {
+		var particleEntity = new Entity();
+		particleEntity.positionComponent = new PositionComponent();
+
+		particleEntity.threeJsComponent = new ThreeJsComponent();
+
+		var particleSize = Math.random();
+		var particleGeometry = new THREE.PlaneBufferGeometry( particleSize, particleSize, 1, 1);
+		var particleMaterial = new THREE.MeshLambertMaterial( { 
+		    color: this.entityColors[Math.floor(Math.random()*this.entityColors.length)],
+		    polygonOffsetFactor: 1,
+		    polygonOffsetUnits: -6,
+		    polygonOffset: true
+		} );
+    	var plane = new THREE.Mesh( particleGeometry, particleMaterial );	
+    	scene.add(plane);
+
+    	particleEntity.threeJsComponent.mesh = plane;
+
+    	particleEntity.threeJsComponent.mesh.visible = false;
+
+    	particleEntity.particleComponent = new ParticleComponent();
+
+		return particleEntity;
 	}
 }
