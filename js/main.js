@@ -79,7 +79,7 @@ var cameraEntity = EntityFactory.createCamera(threeCamera, new THREE.Vector3(0.1
 cameraSystem.cameraEntity = cameraEntity;
 
 
-var wallTileGeometry = new THREE.PlaneBufferGeometry( 16, 16, 8, 8);
+var wallTileGeometry = new THREE.PlaneBufferGeometry( 32, 32, 8, 8);
 var brickTexture = THREE.ImageUtils.loadTexture("textures/brick.png");
 brickTexture.magFilter = THREE.NearestFilter;
 brickTexture.minFilter = THREE.NearestFilter;
@@ -90,6 +90,18 @@ var brickMaterial = new THREE.MeshLambertMaterial( {
     polygonOffsetUnits: 3,
     polygonOffset: true
 } );
+
+var brickTexture2 = THREE.ImageUtils.loadTexture("textures/brick2.png");
+brickTexture2.magFilter = THREE.NearestFilter;
+brickTexture2.minFilter = THREE.NearestFilter;
+brickTexture2.generateMipMaps = false;    
+var brickMaterial2 = new THREE.MeshLambertMaterial( { 
+    map: brickTexture2,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 3,
+    polygonOffset: true
+} );
+
 
 var drainPipeTexture = THREE.ImageUtils.loadTexture("textures/drainPipeVert1.png");
 drainPipeTexture.magFilter = THREE.NearestFilter;
@@ -103,11 +115,15 @@ var drainPipeMaterial = new THREE.MeshLambertMaterial( {
     transparent: true
 } );
 
-for(var x = -40; x < 40; x++) {
-    for(var y = 0; y < 80; y++) {
-        var plane = new THREE.Mesh( wallTileGeometry, brickMaterial );
-        plane.position.x = x * 16;
-        plane.position.y = y * 16;
+for(var x = -20; x < 20; x++) {
+    for(var y = 0; y < 40; y++) {
+        var bm = brickMaterial;
+        if(Math.random() < 0.2) {
+            bm = brickMaterial2;
+        }
+        var plane = new THREE.Mesh( wallTileGeometry, bm );
+        plane.position.x = x * 32;
+        plane.position.y = y * 32;
         scene.add( plane );
 
         if(Math.random() < 0.1 && plane.position.x != 0) {
