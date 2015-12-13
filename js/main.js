@@ -187,6 +187,9 @@ for(var i = 0; i < 50; i++) {
 
 window.addEventListener("resize", respondToResize);
 
+var scoreImage = new Image();
+scoreImage.src = "textures/scoreFont.png";
+
 function render() {
     stats.begin();
     var now = Date.now();
@@ -211,6 +214,14 @@ function render() {
     hudContext.clearRect(0, 0, hud.width, hud.height);
     hudBufferContext.imageSmoothingEnabled = false;
     hudBufferContext.clearRect(0, 0, hudBuffer.width, hudBuffer.height);
+
+    var score = ""+playerEntity.playerComponent.fliesEaten;
+    var fontX = 5;
+    for(var i in score) {
+        var scoreDigit = score[i];
+        hudBufferContext.drawImage(scoreImage, scoreDigit*5, 0, 5, 8, fontX, 0, 5, 8);
+        fontX+=5;
+    }
 
     var widthRatio = hud.width / hudBuffer.width;
     var heightRatio = hud.height / hudBuffer.height;
