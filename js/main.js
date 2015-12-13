@@ -25,15 +25,15 @@ var hudBufferContext = hudBuffer.getContext('2d');
 
 renderer.domElement.add
 
-var stats = new Stats();
-stats.setMode(0); // 0: fps, 1: ms
+// var stats = new Stats();
+// stats.setMode(0); // 0: fps, 1: ms
 
-// align top-left
-stats.domElement.style.position = 'absolute';
-stats.domElement.style.left = '0px';
-stats.domElement.style.top = '0px';
+// // align top-left
+// stats.domElement.style.position = 'absolute';
+// stats.domElement.style.left = '0px';
+// stats.domElement.style.top = '0px';
 
-container.appendChild( stats.domElement );
+// container.appendChild( stats.domElement );
 
 // var light1 = new THREE.DirectionalLight(0xffffff, 1);
 // light1.position.set(1,0.5,1).normalize();
@@ -215,7 +215,7 @@ var scoreString = ""
 var splashVisible = true;
 
 function render() {
-    stats.begin();
+    // stats.begin();
     var now = Date.now();
     var tick = Math.min(0.1, (now - lastFrameTime) / 1000);
     lastFrameTime = now;
@@ -292,6 +292,6 @@ function render() {
 
     hudContext.drawImage(hudBuffer, 0, 0, hudBuffer.width, hudBuffer.height, destX, destY, destWidth, destHeight);
 
-    stats.end();
+    // stats.end();
 }
 render();
