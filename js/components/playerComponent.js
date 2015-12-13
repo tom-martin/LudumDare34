@@ -1,4 +1,4 @@
 function PlayerComponent() {
-	this.rotationSpeed = 4;
-	this.moveSpeed = 4;
+	this.rotationSpeed = 8;
+	this.moveSpeed = 6;
 }

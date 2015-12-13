@@ -24,6 +24,13 @@ var EntityFactory = {
 
 		playerEntity.playerComponent = new PlayerComponent();
 
+		playerEntity.carriesLightComponent = new CarriesLightComponent();
+		var light = new THREE.PointLight( 0x20ff40, 1, 32 );
+    	light.position.copy( playerEntity.positionComponent.position );
+    	light.position.z += 1;
+    	scene.add( light );
+    	playerEntity.carriesLightComponent.light = light;
+
 		return playerEntity;
 	},
 
@@ -39,7 +46,7 @@ var EntityFactory = {
 		flyEntity.randomlyRotatesComponent = new RandomlyRotatesComponent();
 
 		flyEntity.carriesLightComponent = new CarriesLightComponent();
-		var light = new THREE.PointLight( 0xffffff, 1, 10 );
+		var light = new THREE.PointLight( 0xffffff, 1, 20 );
     	light.position.copy( flyEntity.positionComponent.position );
     	light.position.z += 1;
     	scene.add( light );

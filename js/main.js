@@ -70,6 +70,7 @@ spriteSystem.spriteEntities.push(playerEntity);
 playerSystem.playerEntity = playerEntity;
 getsEatenSystem.eatingEntities.push(playerEntity);
 recyclesNearPlayerSystem.playerEntity = playerEntity;
+lightCarryingSystem.lightCarryingEntities.push(playerEntity);
 
 
 var cameraSystem = new CameraSystem();
@@ -77,7 +78,7 @@ var cameraEntity = EntityFactory.createCamera(threeCamera, new THREE.Vector3(0.1
 cameraSystem.cameraEntity = cameraEntity;
 
 
-var wallTileGeometry = new THREE.PlaneBufferGeometry( 16, 16, 16, 16);
+var wallTileGeometry = new THREE.PlaneBufferGeometry( 16, 16, 8, 8);
 var brickTexture = THREE.ImageUtils.loadTexture("textures/brick.png");
 brickTexture.magFilter = THREE.NearestFilter;
 brickTexture.minFilter = THREE.NearestFilter;

@@ -2,7 +2,7 @@ function RecyclesNearPlayerSystem() {
 	this.playerEntity = null;
 	this.recyclableEntities = [];
 
-	this.recyclableDistance = 100;
+	this.recyclableDistance = 75;
 
 	this.update = function(now, tick) {
 		var playerPosition = this.playerEntity.positionComponent.position;
