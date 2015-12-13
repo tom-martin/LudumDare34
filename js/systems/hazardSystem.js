@@ -1,3 +1,13 @@
+var audio  = document.createElement("audio");
+var canPlayMP3 = (typeof audio.canPlayType === "function" && audio.canPlayType("audio/mpeg") !== "");
+
+var deathSounds = [];
+if(canPlayMP3) {
+	deathSounds = [new Audio('sound/death1.mp3')];
+} else {
+	deathSounds = [new Audio('sound/death1.ogg')];
+}
+
 function HazardSystem() {
 	this.playerEntity = null;
 	this.hazardsToAdd = [];
@@ -6,7 +16,7 @@ function HazardSystem() {
 	this.staticHazards = [];
 
 	this.update = function(now, tick) {
-		if(this.playerEntity != null && this.playerEntity.playerComponent.running) {
+		if(this.playerEntity != null && this.playerEntity.playerComponent.running && !this.playerEntity.playerComponent.dead) {
 			var playerPosition = this.playerEntity.positionComponent.position;
 
 			var newHazardsToAdd = [];
@@ -32,6 +42,7 @@ function HazardSystem() {
 						playerPosition.x + 1 < hazard.x - 0.5 ||
 						playerPosition.y - 1 > hazard.y + 0.5 ||
 						playerPosition.y + 1 < hazard.y - 0.5)) {
+					if(!this.playerEntity.playerComponent.dead) deathSounds[Math.floor(Math.random()*deathSounds.length)].play();
 					this.playerEntity.playerComponent.dead = true;
 				}
 			}
@@ -43,6 +54,7 @@ function HazardSystem() {
 						playerPosition.x + 0.5 < hazard.x - hazard.halfWidth ||
 						playerPosition.y - 0.5 > hazard.y + hazard.halfHeight ||
 						playerPosition.y + 0.5 < hazard.y - hazard.halfHeight)) {
+					if(!this.playerEntity.playerComponent.dead) deathSounds[Math.floor(Math.random()*deathSounds.length)].play();
 					this.playerEntity.playerComponent.dead = true;
 				}
 			}

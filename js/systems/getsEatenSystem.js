@@ -1,3 +1,13 @@
+var audio  = document.createElement("audio");
+var canPlayMP3 = (typeof audio.canPlayType === "function" && audio.canPlayType("audio/mpeg") !== "");
+
+var biteSounds = [];
+if(canPlayMP3) {
+	biteSounds = [new Audio('sound/bite1.mp3'), new Audio('sound/bite2.mp3'), new Audio('sound/bite3.mp3'), new Audio('sound/bite4.mp3'), new Audio('sound/bite5.mp3')];
+} else {
+	biteSounds = [new Audio('sound/bite1.ogg'), new Audio('sound/bite2.ogg'), new Audio('sound/bite3.ogg'), new Audio('sound/bite4.ogg'), new Audio('sound/bite5.ogg')];
+}
+
 function GetsEatenSystem() {
 	this.eatingEntities = [];
 	this.edibleEntities = [];
@@ -18,6 +28,7 @@ function GetsEatenSystem() {
 							eatingPositionComponent.position.y + 2 < ediblePositionComponent.position.y - 2)) {
 							edibleEntity.spriteComponent.sprite.mesh.visible = false;
 							eatingEntity.playerComponent.fliesEaten ++;
+							biteSounds[Math.floor(Math.random()*biteSounds.length)].play();
 						}
 					}
 				}

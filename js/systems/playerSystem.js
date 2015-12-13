@@ -127,7 +127,7 @@ function PlayerSystem(input, scene, hazardSystem) {
 				if(positionComponent.position.y > -16) {
 					fallingSpeed+=(tick*fallingSpeed);
 					positionComponent.rotation -= (tick * Math.min(4, fallingSpeed));
-					positionComponent.position.y -= tick*fallingSpeed;
+					positionComponent.position.y -= tick*Math.min(64,fallingSpeed);
 				} else {
 					positionComponent.position.y = -16;
 				}

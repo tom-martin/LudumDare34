@@ -257,6 +257,11 @@ function render() {
         hudBufferContext.drawImage(endSplashImage, 0, 0);
         fontX += 75;
         fontY += 68;
+        jiggleTime = 0;
+    }
+
+    if((now - jiggleTime) < 600) {
+        fontY += Math.round((now-jiggleTime)/200)%2;
     }
 
     for(var i in scoreString) {
