@@ -1,4 +1,4 @@
-function PlayerSystem(input, scene) {
+function PlayerSystem(input, scene, hazardSystem) {
 	this.playerEntity = null;
 
 	var createStemTexture = function(i) {
@@ -28,6 +28,7 @@ function PlayerSystem(input, scene) {
 	var stemCache = [];
 
 	var extendStemCache = function(amount) {
+		console.log("Extending stem cache");
 		for(var i = 0; i < amount; i++) {
 			var stemTexture = stemTextures[Math.floor(Math.random()*stemTextures.length)];
 			var stemMaterial = new THREE.MeshLambertMaterial( { 
@@ -45,7 +46,7 @@ function PlayerSystem(input, scene) {
 		    stemCache.push(plane);
 		}	
 	}
-	extendStemCache(10);
+	extendStemCache(1000);
 
 	
 	var stemCacheIndex = 0;
@@ -66,7 +67,7 @@ function PlayerSystem(input, scene) {
 	this.moveVector = new THREE.Vector3();
 	this.Z = new THREE.Vector3(0, 0, 1);
 	this.update = function(now, tick) {
-		if(this.playerEntity != null) {
+		if(this.playerEntity != null && !this.playerEntity.playerComponent.dead) {
 			var positionComponent = this.playerEntity.positionComponent;
 			var playerComponent = this.playerEntity.playerComponent;
 
@@ -83,34 +84,39 @@ function PlayerSystem(input, scene) {
 			positionComponent.position.x += this.moveVector.x*tick*playerComponent.moveSpeed;
 			positionComponent.position.y += this.moveVector.y*tick*playerComponent.moveSpeed;
 			positionComponent.position.z += this.moveVector.z*tick*playerComponent.moveSpeed;
+		
+
+			// debugCube1.position.copy(positionComponent.position);
+
+			lastStemPlane.position.copy(positionComponent.position);
+		    lastStemPlane.position.lerp(lastStemDrop, 0.5);
+		    var angleRadians = Math.atan2(lastStemDrop.y - positionComponent.position.y, lastStemDrop.x - positionComponent.position.x);
+		    lastStemPlane.rotation.z = angleRadians+(Math.PI/2);
+
+		    var distanceToLastStemDropSquared = positionComponent.position.distanceToSquared(lastStemDrop);
+		    var distanceNormalised = distanceToLastStemDropSquared/16;
+		    lastStemPlane.scale.y = distanceNormalised;
+
+			if(distanceToLastStemDropSquared >= 8) {
+			    var plane = stemCache[stemCacheIndex];
+			    plane.position.copy(positionComponent.position);
+			    plane.position.lerp(lastStemDrop, 0.5);
+			    plane.rotation.z = angleRadians+(Math.PI/2);
+			    plane.visible = true;
+
+				var hazardLocation = new THREE.Vector3();
+			    hazardLocation.copy(plane.position);
+			    hazardSystem.hazardsToAdd.push(hazardLocation);
+
+			    stemCacheIndex += 1;   
+			    if(stemCacheIndex >= stemCache.length) {
+			    	extendStemCache(100);
+			    }
+			    lastStemDrop.copy(positionComponent.position);
+			    // debugCube2.position.copy(positionComponent.position);
+			}
+
+			playerComponent.moveSpeed = 6+playerComponent.fliesEaten;
 		}
-
-		// debugCube1.position.copy(positionComponent.position);
-
-		lastStemPlane.position.copy(positionComponent.position);
-	    lastStemPlane.position.lerp(lastStemDrop, 0.5);
-	    var angleRadians = Math.atan2(lastStemDrop.y - positionComponent.position.y, lastStemDrop.x - positionComponent.position.x);
-	    lastStemPlane.rotation.z = angleRadians+(Math.PI/2);
-
-	    var distanceToLastStemDropSquared = positionComponent.position.distanceToSquared(lastStemDrop);
-	    var distanceNormalised = distanceToLastStemDropSquared/16;
-	    lastStemPlane.scale.y = distanceNormalised;
-
-		if(distanceToLastStemDropSquared >= 8) {
-		    var plane = stemCache[stemCacheIndex];
-		    plane.position.copy(positionComponent.position);
-		    plane.position.lerp(lastStemDrop, 0.5);
-		    plane.rotation.z = angleRadians+(Math.PI/2);
-		    plane.visible = true;
-
-		    stemCacheIndex += 1;
-		    if(stemCacheIndex >= stemCache.length) {
-		    	extendStemCache(100);
-		    }
-		    lastStemDrop.copy(positionComponent.position);
-		    // debugCube2.position.copy(positionComponent.position);
-		}
-
-		playerComponent.moveSpeed = Math.min(64, playerComponent.moveSpeed+tick);
 	}
 }

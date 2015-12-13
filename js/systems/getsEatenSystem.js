@@ -16,6 +16,8 @@ function GetsEatenSystem() {
 						eatingPositionComponent.position.y - 2 > ediblePositionComponent.position.y + 2 ||
 						eatingPositionComponent.position.y + 2 < ediblePositionComponent.position.y - 2)) {
 						edibleEntity.spriteComponent.sprite.mesh.visible = false;
+						eatingEntity.playerComponent.fliesEaten ++;
+						console.log(eatingEntity.playerComponent.fliesEaten);
 					}
 				}
 			}

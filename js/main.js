@@ -57,7 +57,8 @@ respondToResize();
 
 var input = new Input();
 var threeJsSystem = new ThreeJsSystem();
-var playerSystem = new PlayerSystem(input, scene);
+var hazardSystem = new HazardSystem();
+var playerSystem = new PlayerSystem(input, scene, hazardSystem);
 var randomlyRotatesSystem = new RandomlyRotatesSystem();
 var movesByRotationSystem = new MovesByRotationSystem();
 var getsEatenSystem = new GetsEatenSystem();
@@ -71,7 +72,7 @@ playerSystem.playerEntity = playerEntity;
 getsEatenSystem.eatingEntities.push(playerEntity);
 recyclesNearPlayerSystem.playerEntity = playerEntity;
 lightCarryingSystem.lightCarryingEntities.push(playerEntity);
-
+hazardSystem.playerEntity = playerEntity;
 
 var cameraSystem = new CameraSystem();
 var cameraEntity = EntityFactory.createCamera(threeCamera, new THREE.Vector3(0.1, 0.1, 32), playerEntity);
@@ -127,6 +128,7 @@ function render() {
     getsEatenSystem.update(now, tick);
     recyclesNearPlayerSystem.update(now, tick);
     lightCarryingSystem.update(now, tick);
+    hazardSystem.update(now, tick);
 
     renderer.render(scene, threeCamera);
     
