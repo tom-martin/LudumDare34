@@ -18,8 +18,8 @@ container.appendChild(renderer.domElement);
 var hudContext = hud.getContext('2d');
 
 var hudBuffer = document.createElement('canvas');
-hudBuffer.width  = 256;
-hudBuffer.height = 224;
+hudBuffer.width  = 128;
+hudBuffer.height = 112;
 
 var hudBufferContext = hudBuffer.getContext('2d');
 
@@ -190,12 +190,29 @@ window.addEventListener("resize", respondToResize);
 var scoreImage = new Image();
 scoreImage.src = "textures/scoreFont.png";
 
+var splashImage = new Image();
+splashImage.src = "textures/splash.png";
+
+var previousScore = 0
+var jiggleTime = 0;
+
+var scoreString = ""
+
+
+var splashVisible = true;
+
 function render() {
     stats.begin();
     var now = Date.now();
     var tick = Math.min(0.1, (now - lastFrameTime) / 1000);
     lastFrameTime = now;
     requestAnimationFrame(render);
+
+    if(splashVisible && input.spaceDown) {
+        playerEntity.playerComponent.running = true;
+        splashVisible = false;
+        input.spaceDown = false;
+    }
 
     playerSystem.update(now, tick);
     threeJsSystem.update(now, tick);
@@ -207,20 +224,31 @@ function render() {
     recyclesNearPlayerSystem.update(now, tick);
     lightCarryingSystem.update(now, tick);
     hazardSystem.update(now, tick);
+    
 
     renderer.render(scene, threeCamera);
     
     hudContext.imageSmoothingEnabled = false;
     hudContext.clearRect(0, 0, hud.width, hud.height);
     hudBufferContext.imageSmoothingEnabled = false;
+
     hudBufferContext.clearRect(0, 0, hudBuffer.width, hudBuffer.height);
 
-    var score = ""+playerEntity.playerComponent.fliesEaten;
-    var fontX = 5;
-    for(var i in score) {
-        var scoreDigit = score[i];
-        hudBufferContext.drawImage(scoreImage, scoreDigit*5, 0, 5, 8, fontX, 0, 5, 8);
-        fontX+=5;
+    if(previousScore != playerEntity.playerComponent.fliesEaten) {
+        previousScore = playerEntity.playerComponent.fliesEaten;
+        scoreString = ""+playerEntity.playerComponent.fliesEaten;
+        jiggleTime = now;
+    }
+
+    var fontX = 1;
+    for(var i in scoreString) {
+        var scoreDigit = scoreString[i];
+        hudBufferContext.drawImage(scoreImage, scoreDigit*5, 0, 5, 8, fontX, 1, 5, 8);
+        fontX+=4;
+    }
+
+    if(splashVisible) {
+        hudBufferContext.drawImage(splashImage, 0, 0);
     }
 
     var widthRatio = hud.width / hudBuffer.width;

@@ -6,7 +6,7 @@ function HazardSystem() {
 	this.staticHazards = [];
 
 	this.update = function(now, tick) {
-		if(this.playerEntity != null) {
+		if(this.playerEntity != null && this.playerEntity.playerComponent.running) {
 			var playerPosition = this.playerEntity.positionComponent.position;
 
 			var newHazardsToAdd = [];

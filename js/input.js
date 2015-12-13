@@ -4,12 +4,17 @@ function Input() {
 	this.leftDown = false;
     this.rightDown = false;
 
+    this.spaceDown = false;
+
     this.onKeyChange = function(e, down) {
         if(e.keyCode==65) {
             self.leftDown = down;
         }
         if(e.keyCode==68) {
             self.rightDown = down;
+        }
+        if(e.keyCode==32) {
+            self.spaceDown = down;
         }
     }
 

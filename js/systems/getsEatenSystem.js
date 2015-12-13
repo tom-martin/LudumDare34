@@ -5,7 +5,7 @@ function GetsEatenSystem() {
 	this.update = function(now, tick) {
 		for(var i in this.eatingEntities) {
 			var eatingEntity = this.eatingEntities[i];
-			if(!eatingEntity.playerComponent.dead) {
+			if(!eatingEntity.playerComponent.dead && eatingEntity.playerComponent.running) {
 				var eatingPositionComponent = eatingEntity.positionComponent;
 				for(var j in this.edibleEntities) {
 					var edibleEntity = this.edibleEntities[j];

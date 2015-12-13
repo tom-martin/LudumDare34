@@ -73,19 +73,24 @@ function PlayerSystem(input, scene, hazardSystem) {
 			var playerComponent = this.playerEntity.playerComponent;
 			if(!playerComponent.dead) {
 
-				if(input.leftDown) {
-					positionComponent.rotation += (tick * playerComponent.rotationSpeed);
-				}
-				if(input.rightDown) {
-					positionComponent.rotation -= (tick * playerComponent.rotationSpeed);
-				}
+				if(playerComponent.running) {
 
-				this.moveVector.set(0, 1, 0);
-				this.moveVector.applyAxisAngle(this.Z, positionComponent.rotation);
+					if(input.leftDown) {
+						positionComponent.rotation += (tick * playerComponent.rotationSpeed);
+					}
+					if(input.rightDown) {
+						positionComponent.rotation -= (tick * playerComponent.rotationSpeed);
+					}
 
-				positionComponent.position.x += this.moveVector.x*tick*playerComponent.moveSpeed;
-				positionComponent.position.y += this.moveVector.y*tick*playerComponent.moveSpeed;
-				positionComponent.position.z += this.moveVector.z*tick*playerComponent.moveSpeed;
+					this.moveVector.set(0, 1, 0);
+				
+					this.moveVector.applyAxisAngle(this.Z, positionComponent.rotation);
+				
+
+					positionComponent.position.x += this.moveVector.x*tick*playerComponent.moveSpeed;
+					positionComponent.position.y += this.moveVector.y*tick*playerComponent.moveSpeed;
+					positionComponent.position.z += this.moveVector.z*tick*playerComponent.moveSpeed;
+				}
 			
 
 				lastStemPlane.position.copy(positionComponent.position);
