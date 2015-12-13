@@ -1,4 +1,4 @@
-function Sprite(width, height, scene, sheet, initialAnimName, opacity, texture) {
+function Sprite(width, height, scene, sheet, initialAnimName, opacity, texture, zOrder) {
 	var scope = this;
 	this.setAnim = function(animName) {
 		scope.anim = sheet.anims[animName];
@@ -26,6 +26,7 @@ function Sprite(width, height, scene, sheet, initialAnimName, opacity, texture) 
 
     var newTexture = null;
     if(!texture) {
+        console.log("loading texture");
     	newTexture = THREE.ImageUtils.loadTexture(sheet.textureLocation);
         newTexture.wrapS = newTexture.wrapT = THREE.RepeatWrapping; 
         newTexture.repeat.set( sheet.xScale, sheet.yScale);
@@ -33,6 +34,7 @@ function Sprite(width, height, scene, sheet, initialAnimName, opacity, texture) 
         newTexture.minFilter = THREE.NearestFilter;
         newTexture.generateMipMaps = false;
     } else {
+        console.log("cloning texture");
         newTexture = texture.clone();
         newTexture.needsUpdate = true;
     }
@@ -43,7 +45,15 @@ function Sprite(width, height, scene, sheet, initialAnimName, opacity, texture) 
                      yScale: { type: "f", value: sheet.yScale}, 
                      yOffset: { type: "f", value: this.anim.frames[0].y}};
 
-    this.material = new THREE.MeshLambertMaterial( { map: newTexture, transparent: true, alphaTest: 0.05, side: THREE.DoubleSide} );
+    this.material = new THREE.MeshLambertMaterial( { 
+        map: newTexture, 
+        transparent: true, 
+        alphaTest: 0.05, 
+        side: THREE.DoubleSide,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: zOrder,
+        polygonOffset: true
+    } );
     if(opacity < 1) {
         this.material.opacity = opacity;
     }

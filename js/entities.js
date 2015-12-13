@@ -1,3 +1,5 @@
+
+
 var EntityFactory = {
 	createCamera: function(threeCamera, offset, lookAtEntity) {
 		var cameraEntity = new Entity();
@@ -20,7 +22,7 @@ var EntityFactory = {
 		playerEntity.threeJsComponent = new ThreeJsComponent();
 
 		playerEntity.spriteComponent = new SpriteComponent();
-		playerEntity.spriteComponent.sprite = new Sprite(4, 4, scene, Textures.plantHeadSheet, "idle", 1.0, null);
+		playerEntity.spriteComponent.sprite = new Sprite(4, 4, scene, Textures.plantHeadSheet, "idle", 1.0, null, -5);
 
 		playerEntity.playerComponent = new PlayerComponent();
 
@@ -41,7 +43,7 @@ var EntityFactory = {
 		flyEntity.threeJsComponent = new ThreeJsComponent();
 
 		flyEntity.spriteComponent = new SpriteComponent();
-		flyEntity.spriteComponent.sprite = new Sprite(4, 4, scene, Textures.flySheet, "flying", 1.0, null);
+		flyEntity.spriteComponent.sprite = new Sprite(4, 4, scene, Textures.flySheet, "flying", 1.0, null, -4);
 
 		flyEntity.randomlyRotatesComponent = new RandomlyRotatesComponent();
 
