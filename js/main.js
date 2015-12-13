@@ -193,6 +193,9 @@ scoreImage.src = "textures/scoreFont.png";
 var splashImage = new Image();
 splashImage.src = "textures/splash.png";
 
+var endSplashImage = new Image();
+endSplashImage.src = "textures/endSplash.png";
+
 var previousScore = 0
 var jiggleTime = 0;
 
@@ -212,6 +215,10 @@ function render() {
         playerEntity.playerComponent.running = true;
         splashVisible = false;
         input.spaceDown = false;
+    }
+
+    if(playerEntity.playerComponent.dead && input.spaceDown) {
+        location.reload();
     }
 
     playerSystem.update(now, tick);
@@ -240,15 +247,22 @@ function render() {
         jiggleTime = now;
     }
 
-    var fontX = 1;
-    for(var i in scoreString) {
-        var scoreDigit = scoreString[i];
-        hudBufferContext.drawImage(scoreImage, scoreDigit*5, 0, 5, 8, fontX, 1, 5, 8);
-        fontX+=4;
-    }
-
     if(splashVisible) {
         hudBufferContext.drawImage(splashImage, 0, 0);
+    }
+
+    var fontX = 1;
+    var fontY = 1;
+    if(playerEntity.playerComponent.dead) {
+        hudBufferContext.drawImage(endSplashImage, 0, 0);
+        fontX += 75;
+        fontY += 68;
+    }
+
+    for(var i in scoreString) {
+        var scoreDigit = scoreString[i];
+        hudBufferContext.drawImage(scoreImage, scoreDigit*5, 0, 5, 8, fontX, fontY, 5, 8);
+        fontX+=4;
     }
 
     var widthRatio = hud.width / hudBuffer.width;
