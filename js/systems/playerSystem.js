@@ -120,6 +120,12 @@ function PlayerSystem(input, scene, hazardSystem) {
 				    lastStemDrop.copy(positionComponent.position);
 				}
 
+				if(now - playerComponent.lastEatTime < 800) {
+					playerEntity.spriteComponent.sprite.setAnim("bite");
+				} else {
+					playerEntity.spriteComponent.sprite.setAnim("idle");
+				}
+
 				playerComponent.moveSpeed = Math.min(48, 6+playerComponent.fliesEaten);
 			} else {
 				lastStemPlane.visible = false;

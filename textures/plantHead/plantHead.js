@@ -6,10 +6,23 @@ Textures.plantHeadSheet = {
  "xScale": 0.25,
  "yScale": 0.25,
  "anims": {
-  "dead": {
+  "bite": {
    "frames": [
     {
      "x": 0,
+     "y": 0
+    },
+    {
+     "x": 0.2578125,
+     "y": 0
+    }
+   ],
+   "frameLength": 200
+  },
+  "dead": {
+   "frames": [
+    {
+     "x": 0.515625,
      "y": 0
     }
    ],
@@ -18,12 +31,12 @@ Textures.plantHeadSheet = {
   "idle": {
    "frames": [
     {
-     "x": 0.2578125,
-     "y": 0
+     "x": 0,
+     "y": 0.2578125
     },
     {
-     "x": 0.515625,
-     "y": 0
+     "x": 0.2578125,
+     "y": 0.2578125
     }
    ],
    "frameLength": 200
