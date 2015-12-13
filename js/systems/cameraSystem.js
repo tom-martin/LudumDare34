@@ -1,13 +1,21 @@
 function CameraSystem() {
 	this.cameraEntity = null;
 
+	var targetZOffset = 0;
+
 	this.update = function(now, tick) {
 		if(this.cameraEntity != null) {
 			var cameraComponent = this.cameraEntity.cameraComponent;
 			var threeCamera = cameraComponent.threeCamera;
 
 			threeCamera.position.copy(cameraEntity.positionComponent.position);
-			cameraComponent.offset.z = Math.min(96, cameraComponent.offset.z+tick);
+			// hack
+			targetZOffset = Math.min(96, 32+cameraComponent.lookAtEntity.playerComponent.fliesEaten);
+			if(cameraComponent.offset.z > targetZOffset) {
+				cameraComponent.offset.z = Math.max(targetZOffset, cameraComponent.offset.z-tick);
+			} else {
+				cameraComponent.offset.z = Math.min(targetZOffset, cameraComponent.offset.z+tick);
+			}
 
 			if(cameraComponent.lookAtEntity != null) {
 				var lookAtPosition = cameraComponent.lookAtEntity.positionComponent.position;
