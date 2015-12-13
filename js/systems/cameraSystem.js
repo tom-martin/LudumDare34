@@ -12,9 +12,9 @@ function CameraSystem() {
 			// hack
 			targetZOffset = Math.min(96, 24+cameraComponent.lookAtEntity.playerComponent.moveSpeed);
 			if(cameraComponent.offset.z > targetZOffset) {
-				cameraComponent.offset.z = Math.max(targetZOffset, cameraComponent.offset.z-tick);
+				cameraComponent.offset.z = Math.max(targetZOffset, cameraComponent.offset.z-(tick*2));
 			} else {
-				cameraComponent.offset.z = Math.min(targetZOffset, cameraComponent.offset.z+tick);
+				cameraComponent.offset.z = Math.min(targetZOffset, cameraComponent.offset.z+(tick*2));
 			}
 
 			if(cameraComponent.lookAtEntity != null) {

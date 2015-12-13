@@ -39,7 +39,7 @@ container.appendChild( stats.domElement );
 // light1.position.set(1,0.5,1).normalize();
 // scene.add(light1);
 
-scene.add(new THREE.AmbientLight( 0x404050 ));
+scene.add(new THREE.AmbientLight( 0x202030 ));
 
 var lastFrameTime = Date.now();
 
@@ -74,6 +74,7 @@ recyclesNearPlayerSystem.playerEntity = playerEntity;
 lightCarryingSystem.lightCarryingEntities.push(playerEntity);
 hazardSystem.playerEntity = playerEntity;
 
+
 var cameraSystem = new CameraSystem();
 var cameraEntity = EntityFactory.createCamera(threeCamera, new THREE.Vector3(0.1, 0.1, 32), playerEntity);
 cameraSystem.cameraEntity = cameraEntity;
@@ -87,7 +88,7 @@ brickTexture.generateMipMaps = false;
 var brickMaterial = new THREE.MeshLambertMaterial( { 
     map: brickTexture,
     polygonOffsetFactor: 1,
-    polygonOffsetUnits: 3,
+    polygonOffsetUnits: 4,
     polygonOffset: true
 } );
 
@@ -98,7 +99,7 @@ brickTexture2.generateMipMaps = false;
 var brickMaterial2 = new THREE.MeshLambertMaterial( { 
     map: brickTexture2,
     polygonOffsetFactor: 1,
-    polygonOffsetUnits: 3,
+    polygonOffsetUnits: 4,
     polygonOffset: true
 } );
 
@@ -107,13 +108,43 @@ var drainPipeTexture = THREE.ImageUtils.loadTexture("textures/drainPipeVert1.png
 drainPipeTexture.magFilter = THREE.NearestFilter;
 drainPipeTexture.minFilter = THREE.NearestFilter;
 drainPipeTexture.generateMipMaps = false;    
-var drainPipeMaterial = new THREE.MeshLambertMaterial( { 
+var drainPipeMaterial = new THREE.MeshBasicMaterial( { 
     map: drainPipeTexture,
+    polygonOffsetFactor: 1,
+    polygonOffsetUnits: 3,
+    polygonOffset: true,
+    transparent: true
+} );
+
+var drainPipeHorizTexture = THREE.ImageUtils.loadTexture("textures/drainPipeHoriz1.png");
+drainPipeHorizTexture.magFilter = THREE.NearestFilter;
+drainPipeHorizTexture.minFilter = THREE.NearestFilter;
+drainPipeHorizTexture.generateMipMaps = false;    
+var drainPipeHorizMaterial = new THREE.MeshBasicMaterial( { 
+    map: drainPipeHorizTexture,
     polygonOffsetFactor: 1,
     polygonOffsetUnits: 2,
     polygonOffset: true,
     transparent: true
 } );
+
+function addVerticalDrainPipe(x, y, height) {
+    var drainPipeGeometry = new THREE.PlaneBufferGeometry( 4, height, 1, Math.floor(height/4));
+    var plane = new THREE.Mesh( drainPipeGeometry, drainPipeMaterial );
+    plane.position.x = x * 32;
+    plane.position.y = y * 32;
+    hazardSystem.staticHazards.push({x: plane.position.x, y: plane.position.y, halfWidth: 2, halfHeight: height/2});
+    scene.add( plane );
+}
+
+function addHorizontalDrainPipe(x, y, width) {
+    var drainPipeGeometry = new THREE.PlaneBufferGeometry( width, 4, Math.floor(width/4), 1);
+    var plane = new THREE.Mesh( drainPipeGeometry, drainPipeHorizMaterial );
+    plane.position.x = x * 32;
+    plane.position.y = y * 32;
+    hazardSystem.staticHazards.push({x: plane.position.x, y: plane.position.y, halfWidth: width/2, halfHeight: 2});
+    scene.add( plane );
+}
 
 for(var x = -20; x < 20; x++) {
     for(var y = 0; y < 40; y++) {
@@ -128,15 +159,20 @@ for(var x = -20; x < 20; x++) {
 
         if(Math.random() < 0.1 && plane.position.x != 0) {
             var height = (5+Math.floor(Math.random()*10))*4;
-            var drainPipeGeometry = new THREE.PlaneBufferGeometry( 4, height, 1, Math.floor(height/4));
-            var plane = new THREE.Mesh( drainPipeGeometry, drainPipeMaterial );
-            plane.position.x = x * 16;
-            plane.position.y = y * 16;
-            hazardSystem.staticHazards.push({x: plane.position.x, y: plane.position.y, halfWidth: 2, halfHeight: height/2});
-            scene.add( plane );
+            addVerticalDrainPipe(x, y, height);
+        }
+
+        if(Math.random() < 0.1 && plane.position.x != 0) {
+            var width = (5+Math.floor(Math.random()*10))*4;
+            addHorizontalDrainPipe(x, y, width);
         }
     }
 }
+
+addVerticalDrainPipe(-20.5, 19.5, 40*32);
+addVerticalDrainPipe(19.5, 19.5, 40*32);
+addHorizontalDrainPipe(-0.5, -0.5, 40*32);
+addHorizontalDrainPipe(-0.5, 39.5, 40*32);
 
 for(var i = 0; i < 50; i++) {
     var flyEntity = EntityFactory.createFly(scene);
@@ -186,7 +222,6 @@ function render() {
     var destY = Math.floor((hud.height - destHeight) / 2);
 
     hudContext.drawImage(hudBuffer, 0, 0, hudBuffer.width, hudBuffer.height, destX, destY, destWidth, destHeight);
-
 
     stats.end();
 }

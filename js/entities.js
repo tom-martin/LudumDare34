@@ -33,6 +33,8 @@ var EntityFactory = {
     	scene.add( light );
     	playerEntity.carriesLightComponent.light = light;
 
+    	playerEntity.positionComponent.position.y = -14;
+    	
 		return playerEntity;
 	},
 
