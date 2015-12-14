@@ -51,7 +51,7 @@ renderer.domElement.add
 // light1.position.set(1,0.5,1).normalize();
 // scene.add(light1);
 
-scene.add(new THREE.AmbientLight( 0x101020 ));
+scene.add(new THREE.AmbientLight( 0x202030 ));
 
 var lastFrameTime = Date.now();
 
