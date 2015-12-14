@@ -42,6 +42,7 @@ function Input() {
     this.handleTouchEnd = function(evt) {
         self.leftDown = false;
         self.rightDown = false;
+        self.spaceDown = false;
     }
 
     document.addEventListener("keydown", function(e) { self.onKeyChange(e, true); });
