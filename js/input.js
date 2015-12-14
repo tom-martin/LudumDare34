@@ -9,16 +9,20 @@ function Input() {
     this.onKeyChange = function(e, down) {
         if(e.keyCode==65) {
             self.leftDown = down;
+            e.preventDefault();
         }
         if(e.keyCode==68) {
             self.rightDown = down;
+            e.preventDefault();
         }
         if(e.keyCode==32) {
             self.spaceDown = down;
+            e.preventDefault();
         }
 
         if(e.keyCode==70) {
             reqFullScreen();
+            e.preventDefault();
         }
     }
 
