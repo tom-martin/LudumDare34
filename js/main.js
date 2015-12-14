@@ -6,6 +6,18 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.domElement.style.zIndex = 1;
 var container = document.getElementById('container');
 
+function reqFullScreen() {
+    if (container.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (container.msRequestFullscreen) {
+      container.msRequestFullscreen();
+    } else if (container.mozRequestFullScreen) {
+      container.mozRequestFullScreen();
+    } else if (container.webkitRequestFullscreen) {
+      container.webkitRequestFullscreen();
+    }
+}
+
 var hud = document.createElement('canvas');
 hud.width  = window.innerWidth;
 hud.height = window.innerHeight;

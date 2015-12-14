@@ -16,8 +16,36 @@ function Input() {
         if(e.keyCode==32) {
             self.spaceDown = down;
         }
+
+        if(e.keyCode==70) {
+            reqFullScreen();
+        }
+    }
+
+    this.handleTouchStart = function(evt) {
+        reqFullScreen();
+        evt.preventDefault();
+
+        if(evt.changedTouches.length == 1) {
+            self.spaceDown = true;
+            var mouseX = evt.changedTouches[0].pageX;
+            if(mouseX < window.innerWidth / 2) {
+                self.leftDown = true;
+                self.rightDown = false;
+            } else {
+                self.rightDown = true;
+                self.leftDown = false;
+            }
+        }
+    }
+
+    this.handleTouchEnd = function(evt) {
+        self.leftDown = false;
+        self.rightDown = false;
     }
 
     document.addEventListener("keydown", function(e) { self.onKeyChange(e, true); });
     document.addEventListener("keyup", function(e) { self.onKeyChange(e, false  ); });
+    window.addEventListener("touchstart", self.handleTouchStart, false);
+    window.addEventListener("touchend", self.handleTouchEnd, false);
 }
